@@ -40,6 +40,7 @@ RUN set -ex; \
 		--disable-static \
 		--with-all=no \
 		--with-usb=yes \
+  		--with-serial=yes \
 		--datadir=/usr/share/nut \
 		--with-drvpath=/usr/share/nut \
 		--with-statepath=/var/run/nut \
