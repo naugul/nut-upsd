@@ -1,6 +1,6 @@
-FROM alpine:3.12
+FROM --platform=linux/arm64 alpine:3.12
 
-LABEL maintainer="docker@upshift.fr"
+LABEL maintainer="docker@naugul"
 
 ENV NUT_VERSION 2.7.4
 
@@ -38,9 +38,7 @@ RUN set -ex; \
 		--disable-dependency-tracking \
 		--enable-strip \
 		--disable-static \
-		--with-all=no \
-		--with-usb=yes \
-  		--with-serial=yes \
+		--with-all=yes \
 		--datadir=/usr/share/nut \
 		--with-drvpath=/usr/share/nut \
 		--with-statepath=/var/run/nut \
