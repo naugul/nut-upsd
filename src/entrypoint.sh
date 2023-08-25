@@ -1,14 +1,12 @@
-#!/bin/sh -ex
+#!/bin/sh
+set -xe
 
-if [ -z "$API_PASSWORD" ]
-then
-   API_PASSWORD=$(dd if=/dev/urandom bs=18 count=1 2>/dev/null | base64)
-fi
-
-if [ -z "$ADMIN_PASSWORD" ]
-then
-   ADMIN_PASSWORD=$(dd if=/dev/urandom bs=18 count=1 2>/dev/null | base64)
-fi
+cat >/var/run/nut/app/webNUT/webnut/config.py <<EOF
+server='127.0.0.1'
+port = '3493'
+username = 'monitor'
+password = '$API_PASSWORD'
+EOF
 
 cat >/etc/nut/ups.conf <<EOF
 [$UPS_NAME]
@@ -38,9 +36,25 @@ MONITOR $UPS_NAME@localhost 1 monitor $API_PASSWORD master
 SHUTDOWNCMD "$SHUTDOWN_CMD"
 EOF
 
-chgrp -R nut /etc/nut /dev/bus/usb
+echo 'Show all configs...'
+echo ''
+cat /etc/nut/ups.conf
+echo ''
+cat /etc/nut/upsd.conf
+echo ''
+cat /etc/nut/upsd.users
+echo ''
+cat /etc/nut/upsmon.conf
+echo ''
+cat /var/run/nut/app/webNUT/webnut/config.py
+
+chgrp -R nut /etc/nut $UPS_PORT
 chmod -R o-rwx /etc/nut
+cd /var/run/nut/app/webNUT && python setup.py install
+cd /var/run/nut/app/webNUT/webnut
 
 /usr/sbin/upsdrvctl start
 /usr/sbin/upsd
+exec pserve ../production.ini &
 exec /usr/sbin/upsmon -D
+
