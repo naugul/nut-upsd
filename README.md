@@ -54,7 +54,7 @@ This is the password for the upsmon user [monitor], used for communication betwe
 
 ### SHUTDOWN_CMD
 
-*Default value*: `echo 'No shutdown command defined.''`
+*Default value*: `echo 'No shutdown command defined.'`
 
 This is the command upsmon will run when the system needs to be brought down. The command will be run from inside the container.
 
