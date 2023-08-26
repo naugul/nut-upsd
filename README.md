@@ -4,7 +4,6 @@ Docker image for Network UPS Tools server and webNUT.
 Based on the work done by:
 
 https://github.com/upshift-docker/nut-upsd
-
 https://github.com/teknologist/docker-webnut
 
 ## Usage
