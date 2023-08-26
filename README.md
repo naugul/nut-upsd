@@ -36,37 +36,37 @@ This specifies which program will be monitoring this UPS.
 
 ### UPS_PORT
 
-*Default vaue*: `auto`
+*Default value*: `auto`
 
 This is the serial port where the UPS is connected.
 
 ### ADMIN_PASSWORD
 
-*Default vaue*: `secret`
+*Default value*: `secret`
 
 This is the password for the admin user.
 
 ### API_PASSWORD
 
-*Default vaue*: `secret`
+*Default value*: `secret`
 
 This is the password for the upsmon user [monitor], used for communication between upsmon and upsd processes.
 
 ### SHUTDOWN_CMD
 
-*Default vaue*: `echo 'No shutdown command defined.''`
+*Default value*: `echo 'No shutdown command defined.''`
 
 This is the command upsmon will run when the system needs to be brought down. The command will be run from inside the container.
 
 ### NOTIFY_MAIL
 
-*Default vaue*: ``
+*Default value*: ''
 
 This is the email address to which upsmon will send an alert upon status change -uses local postfix service-.
 
 ### MAC_ADDRESS
 
-*Default vaue*: ``
+*Default value*: ''
 
 This is the MAC Address to which a WoL Packet will be sent upon status change to OL -online-.
 
