@@ -9,6 +9,7 @@ https://github.com/teknologist/docker-webnut
 ## Usage
 
 This image provides a UPS monitoring service with web monitoring (webNUT) (only tested with a serial based UPS -using a usb to serial converter-).
+It also has the capability to send emails whenever there is a status change on the UPS, and will also send a Wake on Lan packet on this status changes to OL mode. (AC Back)
 
 ## Auto configuration via environment variables
 
@@ -52,14 +53,27 @@ This is the password for the upsmon user [monitor], used for communication betwe
 
 ### SHUTDOWN_CMD
 
-*Default vaue*: `echo 'System shutdown not configured!'`
+*Default vaue*: `echo 'No shutdown command defined.''`
 
 This is the command upsmon will run when the system needs to be brought down. The command will be run from inside the container.
+
+### NOTIFY_MAIL
+
+*Default vaue*: ``
+
+This is the email address to which upsmon will send an alert upon status change -uses local postfix service-.
+
+### MAC_ADDRESS
+
+*Default vaue*: ``
+
+This is the MAC Address to which a WoL Packet will be sent upon status change to OL -online-.
 
 ------------------------------------------------------
 
 ### DOCKER COMPOSE EXAMPLE
 
+```
 version: '3.3'
 services:
     nut-upsd:
@@ -72,13 +86,14 @@ services:
             - 'UPS_NAME=polaris'
             - 'UPS_DESC=Polaris TX 1000'
             - 'UPS_PORT=/dev/ttyUSB0'
+            - 'NOTIFY_MAIL=mail@example.com'
+            - 'MAC_ADDRESS=aa:bb:cc:dd:ee:ff'
         volumes:
             - 'nut-volume:/etc/nut/'
-            - 'webnut-volume:/app/webNUT/webnut/'
         devices:
             - /dev/ttyUSB0
         image: naugul/nut-upsd
         restart: unless-stopped
 volumes:
   nut-volume:
-  webnut-volume:
+```

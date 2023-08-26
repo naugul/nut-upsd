@@ -12,15 +12,20 @@ ENV UPS_PORT="auto"
 ENV API_PASSWORD="secret"
 ENV ADMIN_PASSWORD="secret"
 
-ENV SHUTDOWN_CMD="echo 'System shutdown not configured!'"
+ENV SHUTDOWN_CMD="echo 'No shutdown command defined.'"
+
+ENV NOTIFY_MAIL=""
+ENV MAC_ADDRESS=""
 
 RUN set -ex; \
 	# run dependencies
 	apk add --no-cache \
 		openssh-client \
 		git \
+		postfix \
 		libusb-compat \
 	; \
+	apk add --no-cache wol --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/; \
 	# build dependencies
 	apk add --no-cache --virtual .build-deps \
 		libusb-compat-dev \
@@ -60,7 +65,6 @@ RUN set -ex; \
 	# cleanup
 	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION; \
 	apk del .build-deps
-
 #installing webnut...
 RUN set -ex; \
 	mkdir /var/run/nut/app; \
@@ -71,12 +75,12 @@ RUN set -ex; \
 	cd ..; \
 	git clone https://github.com/rshipp/webNUT.git && cd webNUT; \
 	pip install -e .
-
 COPY ./src/entrypoint.sh /
+COPY ./src/main.cf /etc/postfix/
+COPY ./src/notify.sh /etc/nut/
 RUN chmod +x /entrypoint.sh 
+RUN chmod +x /etc/nut/notify.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
 WORKDIR /var/run/nut
-
 EXPOSE 3493
 EXPOSE 6543
